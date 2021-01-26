@@ -96,9 +96,11 @@ impl Collidee {
             (velocity_a.x - velocity_b.x).abs(),
             (velocity_a.y - velocity_b.y).abs(),
         );
-        let speed_ratio_a = Vector2::new(velocity_a.x / speed_sum.x, velocity_a.y / speed_sum.y);
-        let speed_ratio_b = Vector2::new(velocity_b.x / speed_sum.x, velocity_b.y / speed_sum.y);
+        let speed_ratio_a: Vector2<f32>;
+        let speed_ratio_b: Vector2<f32>;
 
+        speed_ratio_a = Vector2::new(velocity_a.x / speed_sum.x, velocity_a.y / speed_sum.y);
+        speed_ratio_b = Vector2::new(velocity_b.x / speed_sum.x, velocity_b.y / speed_sum.y);
         let min_safe_distance = Vector2::new(
             box_a.half_size.x + box_b.half_size.x,
             box_a.half_size.y + box_b.half_size.y,
@@ -115,19 +117,22 @@ impl Collidee {
 
         let same_direction = velocity_a.x * velocity_b.x > 0.;
         let faster = speed_ratio_a.x.abs() > speed_ratio_b.x.abs();
+
         if (y_overlapped || overlap.x.abs() <= overlap.y.abs()) && !x_overlapped {
             if faster || !same_direction {
                 correction.x = overlap.x * speed_ratio_a.x;
             }
-            
             self.horizontal = Some(CollideeDetails {
                 name,
                 position: box_b.position,
                 half_size: box_b.half_size,
                 correction: correction.x,
             });
-        }  else {
+        } else {
             correction.y = overlap.y * speed_ratio_a.y;
+            if speed_sum.y == 0. {
+                correction.y = 0.;
+            }
             self.vertical = Some(CollideeDetails {
                 name,
                 position: box_b.position,

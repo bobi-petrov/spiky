@@ -1,7 +1,6 @@
 #![enable(implicit_some)]
 Prefab(
     entities: [
-        // BulletImpact
         PrefabEntity(
             data: AnimationPrefabData(
                 // SpriteScenePrefab

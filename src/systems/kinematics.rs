@@ -42,7 +42,7 @@ impl<'s> System<'s> for PlayerKinematicsSystem {
         for (collider, dir, player, motion) in
             (&mut colliders, &dirs, &players, &mut motions).join()
         {
-            let acceleration: Vector2<f32>;
+            let mut acceleration = Vector2::new(0., 0.);
             match player.state {
                 PlayerState::Idling => {
                     let acceleration_x = if motion.velocity.x != 0. { -0.6 } else { 0. };
@@ -53,7 +53,7 @@ impl<'s> System<'s> for PlayerKinematicsSystem {
                 }
                 PlayerState::Jumping => {
                     if collider.on_ground {
-                        motion.velocity.y = 8.;
+                        motion.velocity.y = 14.;
                         collider.on_ground = false;
                     }
                     let acceleration_x = if motion.velocity.x != 0. { -0.06 } else { 0. };

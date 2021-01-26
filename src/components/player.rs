@@ -30,8 +30,8 @@ impl Player {
             state: PlayerState::Idling,
             is_jumping: false,
             has_jumped: false,
-            max_ground_speed: 2.,
-            max_air_speed: 5.,
+            max_ground_speed: 6.,
+            max_air_speed: 12.,
         }
     }
 }

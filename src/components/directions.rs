@@ -1,13 +1,10 @@
 use amethyst::ecs::{Component, DenseVecStorage};
 
-// Remove this allow annotation when the Up and Down variants are taken in use.
 #[allow(dead_code)]
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum Directions {
     Right,
     Left,
-    Up,
-    Down,
     Neutral,
 }
 

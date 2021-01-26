@@ -30,8 +30,8 @@ Prefab(
                         )),
                         sprites: [
                             List((
-                                texture_width: 17,
-                                texture_height: 64,
+                                texture_width: 64,
+                                texture_height: 17,
                                 sprites: [
                                     // Die
                                     (x: 1, y: 1, width: 12, height: 16), // 0
