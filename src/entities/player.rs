@@ -18,8 +18,8 @@ pub fn load_player(world: &mut World, prefab: Handle<Prefab<AnimationPrefabData>
     let scale = ctx.scale;
     let mut transform = Transform::default();
     transform.set_scale(Vector3::new(scale, scale, scale));
-    transform.set_translation_x(0.);
-    transform.set_translation_y(0.);
+    transform.set_translation_x(75.);
+    transform.set_translation_y(200.);
 
     world
         .create_entity()

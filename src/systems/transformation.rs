@@ -24,6 +24,10 @@ impl<'s> System<'s> for TransformationSystem {
             for platform in (&mut platforms).join() {
                 let player_x = player_transform.translation().x + (12. * 0.25);
                 let player_y = player_transform.translation().y + (16. * 0.25);
+                if player_y <= 0. {
+                    player_transform.set_translation_x(50.);
+                    player_transform.set_translation_y(200.);
+                }
                 // touching at least 1 platform
                 if platform.x < player_x
                     && platform.x + platform.width > player_x
@@ -31,8 +35,6 @@ impl<'s> System<'s> for TransformationSystem {
                     && platform.y + platform.height > player_y
                 {
                     grounded = true;
-                    println!("{:?}", platform);
-                    println!("PlayerCoordinates: x: {:?}, y: {:?}", player_x, player_y);
                 }
             }
             if !grounded && player.state != PlayerState::Jumping {
