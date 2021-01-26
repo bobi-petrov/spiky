@@ -56,19 +56,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(input_bundle)?
         .with(Processor::<Map>::new(), "map_processor", &[])
         .with(PlayerInputSystem, "player_input_system", &[])
-        .with(
-            PlayerKinematicsSystem,
-            "player_kinematics_system",
-            &["player_input_system"],
-        )
-        .with(
-            KinematicsSystem,
-            "kinematics_system",
-            &["player_kinematics_system"],
-        )
-        .with(CollisionSystem, "collision_system", &[])
         .with(TransformationSystem, "transformation_system", &[])
-        .with(ParallaxSystem, "parallax_system", &[])
         .with(
             PlayerAnimationSystem,
             "player_animation_system",
@@ -78,16 +66,6 @@ fn main() -> amethyst::Result<()> {
             AnimationControlSystem,
             "animation_control_system",
             &["player_animation_system"],
-        )
-        .with(
-            DirectionSystem,
-            "direction_system",
-            &["transformation_system"],
-        )
-        .with(
-            PlayerDeathSystem,
-            "player_death_system",
-            &["transformation_system"],
         )
         .with(
             CameraTransformationSystem,

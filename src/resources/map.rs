@@ -13,7 +13,7 @@ use amethyst::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    components::{Collider, Direction, Motion, Parallax},
+    components::CollisionPlatform,
     resources::{AssetType, Context, SpriteSheetList},
 };
 
@@ -82,44 +82,36 @@ impl Map {
 
     fn load_collision_layer(&self, world: &mut World, layer: &Layer, ctx: &Context) {
         let scale = ctx.scale;
-
         for obj in layer.objects.iter() {
             let mut transform = Transform::default();
             transform.set_translation_z(-10.);
 
-            let mut collider = Collider::new(obj.width * scale, obj.height * scale);
-            let bbox = &mut collider.bounding_box;
-            bbox.position = Vector2::new(
-                scale.mul_add(obj.x, ctx.x_correction + bbox.half_size.x),
-                ctx.bg_height * 2. - (obj.y * scale) + ctx.y_correction - bbox.half_size.y,
+            let platform = CollisionPlatform::new(
+                obj.width * scale,
+                obj.height * scale,
+                scale.mul_add(obj.x, ctx.x_correction),
+                ctx.bg_height * 2. - (obj.y * scale) + ctx.y_correction,
             );
-            bbox.old_position = bbox.position;
-
             world
                 .create_entity()
-                .named("Collision")
-                .with(Motion::new())
+                .named("CollisionPlatform")
                 .with(transform)
-                .with(collider)
-                .with(Direction::default())
+                .with(platform)
                 .build();
         }
     }
     fn load_non_collision_layer(&self, world: &mut World, layer: &Layer, ctx: &Context) {
         let scale = ctx.scale;
         let x_correction = ctx.x_correction;
-
         let mut asset_type_wrapper = None;
-        let mut z_translation = 0.;
+        let z_translation = 0.;
 
         match layer.name.as_ref() {
             "background" => {
                 asset_type_wrapper = Some(AssetType::Background);
-                z_translation = ctx.bg_z_translation;
             }
             "platform" => {
                 asset_type_wrapper = Some(AssetType::Platform);
-                z_translation = ctx.platform_z_translation;
             }
             _ => {}
         };
@@ -162,7 +154,6 @@ impl Map {
                             .with(transform)
                             .with(sprite)
                             .with(Transparent)
-                            .with(Parallax::default())
                             .build();
                     }
                     "platform" => {

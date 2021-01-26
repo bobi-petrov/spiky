@@ -1,4 +1,6 @@
-use amethyst::ecs::{Component, DenseVecStorage};
+use amethyst::{
+    ecs::{Component, DenseVecStorage},
+};
 
 #[derive(Eq, Hash, PartialEq, Clone, Copy, Debug)]
 pub enum PlayerState {
@@ -6,6 +8,7 @@ pub enum PlayerState {
     Idling,
     Jumping,
     Running,
+    Falling,
 }
 
 impl Default for PlayerState {
@@ -18,8 +21,6 @@ impl Default for PlayerState {
 #[storage(DenseVecStorage)]
 pub struct Player {
     pub state: PlayerState,
-    pub has_jumped: bool,
-    pub is_jumping: bool,
     pub max_ground_speed: f32,
     pub max_air_speed: f32,
 }
@@ -27,9 +28,7 @@ pub struct Player {
 impl Player {
     pub fn new() -> Self {
         Player {
-            state: PlayerState::Idling,
-            is_jumping: false,
-            has_jumped: false,
+            state: PlayerState::Falling,
             max_ground_speed: 6.,
             max_air_speed: 12.,
         }

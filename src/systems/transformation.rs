@@ -4,7 +4,7 @@ use amethyst::{
 };
 
 use crate::{
-    components::{Collidee, Collider, Player, Motion, Subject},
+    components::{CollisionPlatform, Player, PlayerState, Subject},
     resources::Context,
 };
 
@@ -12,44 +12,35 @@ pub struct TransformationSystem;
 
 impl<'s> System<'s> for TransformationSystem {
     type SystemData = (
-        WriteStorage<'s, Collider>,
-        WriteStorage<'s, Collidee>,
-        WriteStorage<'s, Motion>,
         WriteStorage<'s, Transform>,
+        WriteStorage<'s, CollisionPlatform>,
+        WriteStorage<'s, Player>,
+        ReadExpect<'s, Context>,
     );
 
-    fn run(&mut self, data: Self::SystemData) {
-        let (mut colliders, mut collidees, mut motions, mut transforms) = data;
-
-        for (collider, collidee, motion, transform) in (
-            &mut colliders,
-            &mut collidees,
-            &mut motions,
-            &mut transforms,
-        )
-            .join()
-        {
-            let bbox = &mut collider.bounding_box;
-            let velocity = &mut motion.velocity;
-
-            if let Some(collidee_horizontal) = collidee.horizontal.take() {
-                bbox.position.x -= collidee_horizontal.correction;
-            }
-            if let Some(collidee_vertical) = collidee.vertical.take() {
-                bbox.position.y -= collidee_vertical.correction;
-                velocity.y = 0.;
-                if collidee_vertical.correction < 0. {
-                    collider.on_ground = true;
+    fn run(&mut self, (mut transforms, mut platforms, mut players, ctx): Self::SystemData) {
+        for (player, player_transform) in (&mut players, &mut transforms).join() {
+            let mut grounded = false;
+            for platform in (&mut platforms).join() {
+                let player_x = player_transform.translation().x + (12. * 0.25);
+                let player_y = player_transform.translation().y + (16. * 0.25);
+                // touching at least 1 platform
+                if platform.x < player_x
+                    && platform.x + platform.width > player_x
+                    && platform.y < player_y
+                    && platform.y + platform.height > player_y
+                {
+                    grounded = true;
+                    println!("{:?}", platform);
+                    println!("PlayerCoordinates: x: {:?}, y: {:?}", player_x, player_y);
                 }
             }
-            // FIXME: Due to the take() operation above, collidee.vertical will always be NONE.
-            // Might indicate a bug.
-            if collidee.vertical.is_none() && velocity.y != 0. {
-                collider.on_ground = false;
+            if !grounded && player.state != PlayerState::Jumping {
+                // falling
+                player.state = PlayerState::Falling;
+                let scaled_y_amount = -1. * ctx.scale * 3. as f32;
+                player_transform.prepend_translation_y(scaled_y_amount);
             }
-            transform.set_translation_x(bbox.position.x);
-            transform.set_translation_y(bbox.position.y);
-            collider.set_hit_box_position(*velocity);
         }
     }
 }

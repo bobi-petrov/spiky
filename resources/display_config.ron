@@ -1,4 +1,6 @@
 (
   title: "Spiky",
-  dimensions: Some((1500, 550)),
+  dimensions: Some((1158, 384)),
+  // dimensions: Some((579, 192)),
+  
 )
