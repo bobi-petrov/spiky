@@ -1,0 +1,12 @@
+List((
+    texture_width: 576,
+    texture_height: 192,
+    sprites: [
+        (
+            x: 0,
+            y: 0,
+            width: 576,
+            height: 192,
+        ),
+    ],
+))
