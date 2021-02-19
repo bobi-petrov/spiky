@@ -40,7 +40,7 @@ impl<'s> System<'s> for TransformationSystem {
             if !grounded && player.state != PlayerState::Jumping {
                 // falling
                 player.state = PlayerState::Falling;
-                let scaled_y_amount = -1. * ctx.scale * 3. as f32;
+                let scaled_y_amount = -1. * ctx.scale * 1. as f32;
                 player_transform.prepend_translation_y(scaled_y_amount);
             }
         }
