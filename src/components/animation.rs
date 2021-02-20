@@ -15,7 +15,8 @@ pub enum AnimationId {
     Die,
     Jump,
     Move,
-    Idle
+    Idle,
+    Spike
 }
 
 #[derive(Clone, Debug, Deserialize, PrefabData)]

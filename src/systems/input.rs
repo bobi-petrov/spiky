@@ -8,6 +8,7 @@ use amethyst::{
     input::{InputHandler, StringBindings},
 };
 
+use std::f32::consts::PI;
 pub struct PlayerInputSystem;
 
 impl<'s> System<'s> for PlayerInputSystem {
@@ -22,21 +23,26 @@ impl<'s> System<'s> for PlayerInputSystem {
         for (player, transform) in (&mut players, &mut transforms).join() {
             let run_input = input.axis_value("run").expect("Run action exists");
             let jump_input = input.action_is_down("jump").expect("Jump action exists");
-            // rework so jump works
-            player.state = if jump_input && player.state != PlayerState::Falling && player.state != PlayerState::Jumping {
-                let scaled_y_amount = ctx.scale * 16. * 3. as f32;
+
+            player.state = if jump_input
+                && player.state != PlayerState::Falling
+                && player.state != PlayerState::Jumping
+            {
+                let scaled_y_amount = ctx.scale * 16. + 35.;
                 transform.prepend_translation_y(scaled_y_amount);
-                if run_input != 0. {
-                    let scaled_amount = ctx.scale * 2. * run_input as f32;
-                    transform.prepend_translation_x(scaled_amount);
-                }
                 PlayerState::Jumping
             } else if run_input != 0. {
-                let scaled_amount = ctx.scale * 2. * run_input as f32;
+                let scaled_amount = ctx.scale * 2. * run_input;
+                // rotate player
+                transform.set_rotation_y_axis(0.);
+                if run_input < 0. {
+                    transform.set_rotation_y_axis(PI);
+                }
+
                 transform.prepend_translation_x(scaled_amount);
                 PlayerState::Running
             } else {
-                PlayerState::Idling
+                PlayerState::Falling
             }
         }
     }

@@ -2,9 +2,8 @@ List((
     texture_width: 64,
     texture_height: 96,
     sprites: [
-        (x: 32, y: 32, width: 16, height: 16), // top left
-        (x: 48, y: 32, width: 16, height: 16), // top right
-        (x: 32, y: 48, width: 16, height: 16), // bottom left
-        (x: 48, y: 48, width: 16, height: 16), // bottoms right
+        (x: 32, y: 0, width: 16, height: 16),
+        (x: 32, y: 0, width: 16, height: 16),
+        // (x: 48, y: 80, width: 16, height: 16),
     ],
 ))

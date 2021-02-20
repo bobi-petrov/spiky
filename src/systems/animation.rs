@@ -6,7 +6,44 @@ use amethyst::{
     renderer::SpriteRender,
 };
 
-use crate::components::{Animation, AnimationId, Player, PlayerState};
+use crate::components::{Animation, AnimationId, CollisionPlatform, Player, PlayerState};
+
+pub struct SpikeAnimationSystem;
+
+impl<'s> System<'s> for SpikeAnimationSystem {
+    type SystemData = (
+        Entities<'s>,
+        ReadStorage<'s, CollisionPlatform>,
+        WriteStorage<'s, Animation>,
+        WriteStorage<'s, AnimationControlSet<AnimationId, SpriteRender>>,
+    );
+
+    fn run(&mut self, data: Self::SystemData) {
+        let (entities, platforms, mut animations, mut animation_control_sets) = data;
+
+        for (entity, _, mut animation, animation_control_set) in (
+            &entities,
+            &platforms,
+            &mut animations,
+            &mut animation_control_sets,
+        )
+            .join()
+        {
+            if animation.show {
+                animation_control_set.start(animation.current);
+                animation.show = false;
+            } else {
+                let spike_animation = animation_control_set
+                    .animations
+                    .iter()
+                    .find(|(id, _)| *id == AnimationId::Spike);
+                if spike_animation.is_none() {
+                    let _ = entities.delete(entity);
+                }
+            }
+        }
+    }
+}
 
 #[derive(Default)]
 pub struct AnimationControlSystem;
@@ -27,7 +64,6 @@ impl<'s> System<'s> for AnimationControlSystem {
             // Fetch or create the AnimationControlSet for this entity.
             let animation_control_set =
                 get_animation_set(&mut animation_control_sets, entity).unwrap();
-
             if animation.show {
                 animation.types.iter().for_each(|&animation_id| {
                     // Add the animations to the AnimationControlSet if it doesn't exist already.
@@ -85,7 +121,6 @@ impl<'s> System<'s> for PlayerAnimationSystem {
             let new_animation_id = match player.state {
                 PlayerState::Jumping => AnimationId::Jump,
                 PlayerState::Running => AnimationId::Move,
-                PlayerState::Dying => AnimationId::Die,
                 _ => AnimationId::Idle,
             };
 

@@ -39,11 +39,11 @@ Prefab(
                             )),
                         ],
                         // optional
-                        name: "spikes",
+                        name: "spike",
                     ),
                     // SpriteRenderPrefab
                     render: (
-                        sheet: "spikes",
+                        sheet: "spike",
                         sprite_number: 0,
                     ),
                 ),
@@ -52,7 +52,7 @@ Prefab(
                     animations: [
                         (
                             // AnimationId
-                            ShowSpike,
+                            Spike,
                             (
                                 samplers: [
                                     (

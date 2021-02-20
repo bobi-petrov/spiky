@@ -9,7 +9,7 @@ use crate::components::Subject;
 
 pub fn load_camera_subject(world: &mut World) -> Entity {
     let mut transform = Transform::default();
-    transform.set_translation_xyz(576. / 2., 192. * 1.5, 0.);
+    transform.set_translation_xyz(576., 192. * 1.5, 0.);
 
     world
         .create_entity()

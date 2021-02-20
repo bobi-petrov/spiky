@@ -1,4 +1,4 @@
 (
   title: "Spiky",
-  dimensions: Some((579, 384)), // for scale 1
+  dimensions: Some((1158, 384)), // for scale 1
 )

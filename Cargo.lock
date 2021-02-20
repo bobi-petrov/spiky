@@ -320,6 +320,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "amethyst_test"
+version = "0.15.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bee925a5d56dca49af83c13e356d5e8a31266d2ba626dcfcb19c079c6a3aa11"
+dependencies = [
+ "amethyst",
+ "derivative 2.2.0",
+ "derive-new",
+ "derive_deref",
+ "lazy_static",
+ "log",
+]
+
+[[package]]
 name = "amethyst_ui"
 version = "0.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1053,6 +1067,17 @@ name = "derive-new"
 version = "0.5.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "71f31892cd5c62e414316f2963c5689242c43d8e7bbcaaeca97e5e28c95d91d9"
+dependencies = [
+ "proc-macro2 1.0.24",
+ "quote 1.0.8",
+ "syn 1.0.60",
+]
+
+[[package]]
+name = "derive_deref"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcdbcee2d9941369faba772587a565f4f534e42cb8d17e5295871de730163b2b"
 dependencies = [
  "proc-macro2 1.0.24",
  "quote 1.0.8",
@@ -3422,6 +3447,7 @@ name = "spiky"
 version = "0.1.0"
 dependencies = [
  "amethyst",
+ "amethyst_test",
  "log",
  "serde",
  "specs-derive",

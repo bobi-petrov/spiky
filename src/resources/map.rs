@@ -1,9 +1,6 @@
 use amethyst::{
     assets::{Asset, Handle, ProcessingState},
-    core::{
-        math::{Vector2, Vector3},
-        Transform, WithNamed,
-    },
+    core::{math::Vector3, Transform, WithNamed},
     ecs::{prelude::World, VecStorage},
     error::Error,
     prelude::{Builder, WorldExt},
@@ -13,8 +10,8 @@ use amethyst::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    components::CollisionPlatform,
-    resources::{AssetType, Context, SpriteSheetList},
+    components::{Animation, AnimationId, CollisionPlatform},
+    resources::{AssetType, Context, PrefabList, SpriteSheetList},
 };
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -85,19 +82,48 @@ impl Map {
         for obj in layer.objects.iter() {
             let mut transform = Transform::default();
             transform.set_translation_z(-10.);
+            let mut is_spike = false;
+            match &obj.properties {
+                Some(val) => {
+                    if val[0].value == 1 {
+                        is_spike = true;
+                    }
+                }
+                _ => {}
+            }
 
             let platform = CollisionPlatform::new(
                 obj.width * scale,
                 obj.height * scale,
                 scale.mul_add(obj.x, ctx.x_correction),
                 ctx.bg_height * 2. - (obj.y * scale) + ctx.y_correction,
+                is_spike,
             );
-            world
-                .create_entity()
-                .named("CollisionPlatform")
-                .with(transform)
-                .with(platform)
-                .build();
+            if platform.is_spike {
+                let spike_prefab_handle = {
+                    world
+                        .read_resource::<PrefabList>()
+                        .get(AssetType::Spike)
+                        .unwrap()
+                        .clone()
+                };
+                world
+                    .create_entity()
+                    .named("CollisionPlatform")
+                    .with(transform)
+                    .with(platform)
+                    .with(Animation::new(AnimationId::Spike, vec![AnimationId::Spike]))
+                    .with(spike_prefab_handle)
+                    .with(Transparent)
+                    .build();
+            } else {
+                world
+                    .create_entity()
+                    .named("CollisionPlatform")
+                    .with(transform)
+                    .with(platform)
+                    .build();
+            }
         }
     }
     fn load_non_collision_layer(&self, world: &mut World, layer: &Layer, ctx: &Context) {

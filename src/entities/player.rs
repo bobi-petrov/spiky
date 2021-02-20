@@ -1,7 +1,7 @@
 use amethyst::{
     assets::{Handle, Prefab},
     core::{
-        math::{Vector2, Vector3},
+        math::{Vector3},
         Transform, WithNamed,
     },
     ecs::prelude::World,
@@ -18,7 +18,7 @@ pub fn load_player(world: &mut World, prefab: Handle<Prefab<AnimationPrefabData>
     let scale = ctx.scale;
     let mut transform = Transform::default();
     transform.set_scale(Vector3::new(scale, scale, scale));
-    transform.set_translation_x(75.);
+    transform.set_translation_x(50.);
     transform.set_translation_y(200.);
 
     world

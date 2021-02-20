@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 amethyst = {version = "0.15.1", features = ["vulkan", "json", "no-slow-safety-checks"]}
+amethyst_test = "0.15.3"
 serde = "*"
 log = "*"
 specs-derive = "*"

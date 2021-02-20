@@ -18,6 +18,7 @@ pub enum AssetType {
     Player,
     Background,
     Platform,
+    Spike,
 }
 
 #[derive(Default)]
@@ -65,6 +66,7 @@ pub fn load_assets(world: &mut World, asset_type_list: Vec<AssetType>) -> Progre
             AssetType::Player => ("textures/player.png", "prefabs/player.ron"),
             AssetType::Background => ("textures/background.png", "prefabs/background.ron"),
             AssetType::Platform => ("textures/platforms.png", "prefabs/platforms.ron"),
+            AssetType::Spike => ("textures/spikes.png", "prefabs/spikes.ron"),
         };
 
         match asset_type {
@@ -73,7 +75,7 @@ pub fn load_assets(world: &mut World, asset_type_list: Vec<AssetType>) -> Progre
                     get_sprite_sheet_handle(world, texture_path, ron_path, &mut progress_counter);
                 sprite_sheet_list.insert(asset_type, sprite_sheet_handle);
             }
-            AssetType::Player => {
+            AssetType::Player | AssetType::Spike => {
                 let prefab_handle =
                     get_animation_prefab_handle(world, ron_path, &mut progress_counter);
                 prefab_list.insert(asset_type, prefab_handle);

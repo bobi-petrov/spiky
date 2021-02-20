@@ -23,13 +23,13 @@ impl SimpleState for LoadState {
 
         self.progress_counter = Some(load_assets(
             world,
-            vec![AssetType::Player, AssetType::Background, AssetType::Platform],
+            vec![AssetType::Player, AssetType::Background, AssetType::Platform, AssetType::Spike],
         ));
 
         self.map_handle = {
             let loader = world.read_resource::<Loader>();
             Some(loader.load(
-                "tilemaps/map.json",
+                "tilemaps/map2.json",
                 JsonFormat,
                 self.progress_counter.as_mut().expect("map"),
                 &world.read_resource::<AssetStorage<Map>>(),

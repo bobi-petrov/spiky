@@ -57,6 +57,7 @@ fn main() -> amethyst::Result<()> {
         .with(Processor::<Map>::new(), "map_processor", &[])
         .with(PlayerInputSystem, "player_input_system", &[])
         .with(TransformationSystem, "transformation_system", &[])
+        .with(SpikeAnimationSystem, "spike_animation_system", &[])
         .with(
             PlayerAnimationSystem,
             "player_animation_system",
